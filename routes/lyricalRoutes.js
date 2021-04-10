@@ -4,26 +4,26 @@ const lyricalController = require('../controllers/lyricalController')
 const express = require('express')
 const lyricalRoutes = express.Router()
 
-lyricalRoutes.post('/',lyricalController.create)
+lyricalRoutes.post('/user',lyricalController.create)
 
-lyricalRoutes.get('/login',lyricalController.login)
+lyricalRoutes.get('/user/login',lyricalController.login)
 
-lyricalRoutes.get('/tags',lyricalController.tags)
+lyricalRoutes.get('/user/tags',lyricalController.tags)
 
-lyricalRoutes.get('/moods',lyricalController.moods)
+lyricalRoutes.get('/user/moods',lyricalController.moods)
 
-lyricalRoutes.put('/:id/putlyrical',lyricalController.delete)
+lyricalRoutes.put('/user/putlyrical',lyricalController.putlyrical)
 
-lyricalRoutes.delete('/:id/delete',lyricalController.delete)
+lyricalRoutes.get('/user/getlyrical',lyricalController.getlyrical)
 
-lyricalRoutes.delete('/:id/deletelyrical',lyricalController.deletelyrical)
+lyricalRoutes.delete('/user/delete',lyricalController.delete)
+
+lyricalRoutes.delete('/user/deletelyrical',lyricalController.deletelyrical)
 
 
 // lyricalRoutes.get('/:userId/getlyrical',lyricalController.search)
 
 // lyricalRoutes.get('/search/:lyricalId',lyricalController.searchOne)
-
-
 
 
 

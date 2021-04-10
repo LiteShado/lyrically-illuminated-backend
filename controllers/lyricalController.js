@@ -24,9 +24,9 @@ lyricalController.searchOne = async (req,res) => {
 }
 lyricalController.save = async (req,res) => {
     try {
-        const [lyricalToSave, created] = await models.lyrical.findOrCreate({
+        const [lyricalToSave, created] = await models.lyric.findOrCreate({
             where:{
-                lyricalId: req.params.lyricalId
+                lyricId: req.params.lyricId
             },
             defaults:{
                 lyricalId: req.params.lyricalId

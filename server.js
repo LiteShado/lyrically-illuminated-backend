@@ -24,7 +24,7 @@ const createUser = async (req, res) => {
       res.json({ error: 'email already taken' })
     }
   }
-  app.post('/', createUser)
+  app.post('/user', createUser)
 
   const login = async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.get('/login', login)
+  app.get('/user/login', login)
 
   const tags = async (req, res) => {
     try {
@@ -62,7 +62,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.get('/tags', tags)
+  app.get('/user/tags', tags)
 
   const mood = async (req, res) => {
     try {
@@ -81,7 +81,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.get('/moods', mood)
+  app.get('/user/moods', mood)
 
 
   const deleteUser = async (req, res) => {
@@ -101,7 +101,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'delete failed' })
     }
   }
-  app.delete('/:id/delete', deleteUser)
+  app.delete('/user/delete', deleteUser)
 
   const getlyrical = async (req, res) => {
     try {
@@ -120,7 +120,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.get('/:id/getlyrical', getlyrical)
+  app.get('/user/getlyrical', getlyrical)
 
 
   const deletelyrical = async (req, res) => {
@@ -140,7 +140,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.delete('/:id/deletelyrical', deletelyrical)
+  app.delete('/user/deletelyrical', deletelyrical)
 
 
   const putlyrical = async (req, res) => {
@@ -160,7 +160,7 @@ const createUser = async (req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.put('/:id/putlyrical', putlyrical)
+  app.put('/user/putlyrical', putlyrical)
 
 
 
