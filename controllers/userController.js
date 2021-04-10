@@ -8,7 +8,7 @@ userController.create = async (req, res) => {
       const user = await models.user.create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
+        password: req.body.password
       })
 
       res.json({ message: 'ok', user })
@@ -48,17 +48,17 @@ userController.delete = async(req,res) => {
         res.json({error})
     }
 }
-userController.getLocations = async (req,res) => {
+userController.getlyrical = async (req,res) => {
     try {
-        let user = await models.user.findOne({
+        let user = await models.lyric.findOne({
             where: {
                 id: req.params.userId
             }
         })
-        let locations = await user.getLocations()
-        console.log('locations', locations)
+        let lyrical = await user.getlyrical()
+        console.log('lyrical', lyrical)
         res.json({
-            locations
+            lyrical
         })
     } catch (error) {
         res.json({error})
@@ -66,22 +66,85 @@ userController.getLocations = async (req,res) => {
 
 }
 
-userController.deleteLocation = async (req,res) => {
+userController.deletelyrical = async (req,res) => {
 
     try {
-        let user = await models.user.findOne({
+        let user = await models.lyric.findOne({
             where: {
                 id: req.params.userId
             }
         })
-        let location = await models.location.findOne({
+        let lyric = await models.lyric.findOne({
             where: {
-                id: req.params.locationId
+                id: req.params.lyricId
             }
         })
-        console.log(location)
-        await user.removeLocation(location)
+        console.log(lyric)
+        await user.deletelyrical(lyric)
         res.json({message: 'deleted'})
+    } catch (error) {
+        res.json({error})
+    }
+}
+
+userController.putlyrical = async (req,res) => {
+
+    try {
+        let user = await models.lyric.findOne({
+            where: {
+                id: req.params.userId
+            }
+        })
+        let lyric = await models.lyric.findOne({
+            where: {
+                id: req.params.lyricId
+            }
+        })
+        console.log(lyric)
+        await user.putlyrical(lyric)
+        res.json({message: 'put lyrica'})
+    } catch (error) {
+        res.json({error})
+    }
+}
+
+userController.tags = async (req,res) => {
+
+    try {
+        let user = await models.tag.findOne({
+            where: {
+                id: req.params.userId
+            }
+        })
+        let tag = await models.tag.findOne({
+            where: {
+                id: req.params.tagId
+            }
+        })
+        console.log(mood)
+        await user.tag(tag)
+        res.json({message: 'tag'})
+    } catch (error) {
+        res.json({error})
+    }
+}
+
+userController.mood = async (req,res) => {
+
+    try {
+        let user = await models.mood.findOne({
+            where: {
+                id: req.params.userId
+            }
+        })
+        let mood = await models.mood.findOne({
+            where: {
+                id: req.params.moodId
+            }
+        })
+        console.log(mood)
+        await user.mood(mood)
+        res.json({message: 'mood'})
     } catch (error) {
         res.json({error})
     }

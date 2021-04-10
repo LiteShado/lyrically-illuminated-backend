@@ -5,7 +5,7 @@ const lyricalController = {}
 
 lyricalController.search = async (req,res) => {
     try {
-        let search = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${req.params.lyrical}&appid=${"351fbd2da00ad4e776ef440fb201a922"}&units=imperial`)
+        let search = await axios.get(`http://api.chartlyrics.com/apiv1.asmx/SearchLyricText?lyricText=string`)
     //    console.log(search)
        console.log(search.data)
        res.send(search.data)
@@ -16,7 +16,7 @@ lyricalController.search = async (req,res) => {
 }
 lyricalController.searchOne = async (req,res) => {
     try {
-        let search = await axios.get(`http://api.openweathermap.org/data/2.5/weather?id=${req.params.lyricalId}&appid=${"351fbd2da00ad4e776ef440fb201a922"}&units=imperial`)
+        let search = await axios.get(`http://api.chartlyrics.com/apiv1.asmx/SearchLyricText?lyricText=string`)
         res.send(search.data)
     } catch (error) {
         res.json({error})
