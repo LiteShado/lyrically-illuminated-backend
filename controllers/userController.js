@@ -6,9 +6,24 @@ const userController = {}
 userController.create = async (req, res) => {
     try {
       const user = await models.user.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
+        name: req.user.name,
+        email: req.user.email,
+        password: req.user.password
+      })
+
+      res.json({ message: 'ok', user })
+    } catch (error) {
+      res.status(400)
+      res.json({ error: 'email already taken' })
+    }
+  }
+
+userController.get = async (req, res) => {
+    try {
+      const user = await models.user.findOne({
+        where: {
+            email: req.body.email
+        }
       })
 
       res.json({ message: 'ok', user })
@@ -149,3 +164,5 @@ userController.mood = async (req,res) => {
         res.json({error})
     }
 }
+
+module.exports = userController

@@ -1,21 +1,30 @@
 // require('dotenv').config()
-
-const express = require('express');
-const app = express();
+// const userRoutes = require('./routes/userRoutes')
 
 // const jwt = require('jsonwebtoken')
+// const userRoutes = require('./routes/userRoutes')
+
+const express = require('express')
+const app = express()
 
 const rowdy = require('rowdy-logger')
 const routesReport = rowdy.begin(app)
 
-app.use (express.json())
+app.use(express.json())
 app.use(require('cors')())
+
+const models = require('./models')
+
+// app.use('/users', userRoutes)
 
 const createUser = async (req, res) => {
     try {
       const user = await models.user.create({
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        name: req.body.name,
+        mood: req.body.mood,
+        tag: req.body.tag
       })
 
       res.json({ message: 'signup successful', user })
@@ -25,6 +34,22 @@ const createUser = async (req, res) => {
     }
   }
   app.post('/user', createUser)
+
+const getUser = async(req, res) => {
+    try {
+        const user = await models.user.findOne({
+          where: {
+            id: req.params.id
+          }
+        })
+
+    res.json({ message: 'heres the user', user })
+    } catch (error) {
+      res.status(400)
+      res.json({ error: 'cant get em' })
+    }
+  }
+  app.get('/', getUser)
 
   const login = async (req, res) => {
     try {
@@ -166,11 +191,14 @@ const createUser = async (req, res) => {
 
 
 
+  // app.post('.user', createUser)
+
+const PORT = process.env.port || 3001
+
+app.listen(PORT, () => {
+    routesReport.print()
+    })
+    console.log(`Listening on port ${PORT}`)
 
 
-const port = process.env.PORT || 3001;
-
-app.listen (port, () => {
-    console.log(`Listening on port ${port}`)
-routesReport.print()
-})
+// app.use('./user', userRoutes)

@@ -1,7 +1,11 @@
 
 const models = require('../models')
 const axios = require('axios')
+
+const { response } = require('express')
+
 const lyricalController = {}
+
 
 lyricalController.search = async (req,res) => {
     try {
@@ -49,3 +53,5 @@ lyricalController.save = async (req,res) => {
         res.json({error})
     }
 }
+
+module.exports = lyricalController

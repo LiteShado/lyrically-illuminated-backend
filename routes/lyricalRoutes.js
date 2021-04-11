@@ -1,12 +1,14 @@
 
-const lyricalController = require('../controllers/lyricalController')
-
 const express = require('express')
 const lyricalRoutes = express.Router()
 
-lyricalRoutes.post('/user',lyricalController.create)
+const lyricalController = require('../controllers/lyricalController')
 
-lyricalRoutes.get('/user/login',lyricalController.login)
+// lyricalRoutes.post('/user',lyricalController.create)
+
+// lyricalRoutes.get('/user/login',lyricalController.login)
+
+lyricalRoutes.get('/',lyricalController.getUser)
 
 lyricalRoutes.get('/user/tags',lyricalController.tags)
 
