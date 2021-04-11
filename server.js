@@ -35,12 +35,12 @@ const createUser = async (req, res) => {
   }
   app.post('/user', createUser)
 
+
+
 const getUser = async(req, res) => {
     try {
         const user = await models.user.findOne({
-          where: {
             id: req.params.id
-          }
         })
 
     res.json({ message: 'heres the user', user })
@@ -50,6 +50,7 @@ const getUser = async(req, res) => {
     }
   }
   app.get('/', getUser)
+
 
   const login = async (req, res) => {
     try {
@@ -72,11 +73,9 @@ const getUser = async(req, res) => {
 
   const tags = async (req, res) => {
     try {
-      const user = await models.user.findOne({
-        where: {
-          email: req.body.email
-        }
-      })
+      const user = await models.tag.findAll({
+        id: req.params.id
+    })
 
       if (user.password === req.body.password) {
         res.json({ message: 'login success', user})
@@ -89,16 +88,14 @@ const getUser = async(req, res) => {
   }
   app.get('/user/tags', tags)
 
-  const mood = async (req, res) => {
+  const moods = async (req, res) => {
     try {
-      const user = await models.user.findOne({
-        where: {
-          email: req.body.email
-        }
-      })
+        const user = await models.mood.findAll({
+            id: req.params.id
+        })
 
       if (user.password === req.body.password) {
-        res.json({ message: 'login success', user})
+        res.json({ message: 'these are the moods', user})
       } else {
         res.status(401).json({ error: 'login failed' })
       }
@@ -106,22 +103,28 @@ const getUser = async(req, res) => {
       res.status(400).json({ error: 'login failed' })
     }
   }
-  app.get('/user/moods', mood)
+  app.get('/user/moods', moods)
 
 
   const deleteUser = async (req, res) => {
     try {
       const user = await models.user.findOne({
-        where: {
-          email: req.body.email
-        }
-      })
+          where: {
+            id: req.params.id
+          }
 
-      if (user.password === req.body.password) {
+        })
+        destroy({
+            where: {
+              id
+            }
+  })
+
+    //   if (user.password === req.body.password) {
         res.json({ message: 'delete success', user})
-      } else {
-        res.status(401).json({ error: 'delete failed' })
-      }
+    //   } else {
+    //     res.status(401).json({ error: 'delete failed' })
+    //   }
     } catch (error) {
       res.status(400).json({ error: 'delete failed' })
     }
@@ -131,18 +134,17 @@ const getUser = async(req, res) => {
   const getlyrical = async (req, res) => {
     try {
       const user = await models.user.findOne({
-        where: {
-          email: req.body.email
-        }
+        where:
+            {id:id}
       })
 
       if (user.password === req.body.password) {
-        res.json({ message: 'login success', user})
+        res.json({ message: 'find success', user})
       } else {
-        res.status(401).json({ error: 'login failed' })
+        res.status(401).json({ error: 'find failed' })
       }
     } catch (error) {
-      res.status(400).json({ error: 'login failed' })
+      res.status(400).json({ error: 'find failed' })
     }
   }
   app.get('/user/getlyrical', getlyrical)
@@ -150,19 +152,19 @@ const getUser = async(req, res) => {
 
   const deletelyrical = async (req, res) => {
     try {
-      const user = await models.user.findOne({
-        where: {
-          email: req.body.email
-        }
-      })
+        const user = await models.user.destroy({
+          where: {
+            id: req.params.id
+          }
+        })
 
-      if (user.password === req.body.password) {
-        res.json({ message: 'login success', user})
+    if (user.password === req.body.password) {
+        res.json({ message: 'delete success', user})
       } else {
-        res.status(401).json({ error: 'login failed' })
+        res.status(401).json({ error: 'delete failed' })
       }
     } catch (error) {
-      res.status(400).json({ error: 'login failed' })
+      res.status(400).json({ error: 'delete failed' })
     }
   }
   app.delete('/user/deletelyrical', deletelyrical)
@@ -170,19 +172,27 @@ const getUser = async(req, res) => {
 
   const putlyrical = async (req, res) => {
     try {
-      const user = await models.user.findOne({
+        const user = await models.user.findAll({
         where: {
-          email: req.body.email
-        }
-      })
-
-      if (user.password === req.body.password) {
-        res.json({ message: 'login success', user})
-      } else {
-        res.status(401).json({ error: 'login failed' })
-      }
-    } catch (error) {
-      res.status(400).json({ error: 'login failed' })
+            id: req.params.id
+            },
+        })
+        
+        const updateUser = model.user.update({
+            email: req.body.email,
+            password: req.body.password,
+            name: req.body.name,
+            mood: req.body.mood,
+            tag: req.body.tag
+        })
+        res.status(200).json({ message: 'update successful', updateUser })
+        //   if (user.password === req.body.password) {
+            //     res.json({ message: 'update successful', user})
+            //   } else {
+                //     res.status(401).json({ error: 'update failed' })
+                //   }
+            } catch (error) {
+                res.status(400).json({ error: 'update failed' })
     }
   }
   app.put('/user/putlyrical', putlyrical)
