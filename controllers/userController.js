@@ -22,7 +22,7 @@ userController.get = async (req, res) => {
     try {
       const user = await models.user.findOne({
         where: {
-            email: req.body.email
+            id: req.params.id
         }
       })
 
@@ -49,16 +49,14 @@ userController.login = async (req,res) => {
     }
 }
 
-userController.delete = async(req,res) => {
+userController.deleteUser = async(req,res) => {
     try {
-        let user = await models.user.findOne({
+        let user = await models.user.destroy({
             where: {
                 id: req.params.id
             }
         })
-        await user.destroy()
-
-        res.json({ message: 'user deleted'})
+        res.json({ message: 'user deleted', user})
     } catch (error) {
         res.json({error})
     }
@@ -81,21 +79,16 @@ userController.getlyrical = async (req,res) => {
 
 }
 
-userController.deletelyrical = async (req,res) => {
-
+userController.deleteUser = async (req,res) => {
     try {
-        let user = await models.lyric.findOne({
+        let user = await models.user.findOne({
             where: {
-                id: req.params.userId
+                id: req.params.id
             }
         })
-        let lyric = await models.lyric.findOne({
-            where: {
-                id: req.params.lyricId
-            }
-        })
-        console.log(lyric)
-        await user.deletelyrical(lyric)
+        await user.destroy()
+        console.log(user)
+        await user.deleteUser(user)
         res.json({message: 'deleted'})
     } catch (error) {
         res.json({error})
