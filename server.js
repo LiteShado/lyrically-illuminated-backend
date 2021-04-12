@@ -192,7 +192,7 @@ const getUser = async(req, res) => {
     }
   }
 
-  app.delete('/user/delete/:id', deletelyrical)
+  app.delete('/user/delete/lyrical/:id', deletelyrical)
 
 
   const putlyrical = async (req, res) => {
@@ -228,12 +228,12 @@ const getUser = async(req, res) => {
 
   // app.post('.user', createUser)
 
-const PORT = process.env.port || 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
     routesReport.print()
+    console.log(`listening on port ${PORT}`)
     })
-    console.log(`Listening on port ${PORT}`)
 
 
 // app.use('./user', userRoutes)
