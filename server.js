@@ -120,18 +120,21 @@ const getUser = async(req, res) => {
       })
         console.log(user)
         console.log(req.body.email)
-        console.log(req.body.password)
 
       if (user.password === req.body.password) {
-        res.json({ message: 'login success', user})
+        res.json({ message: 'login success', user: user})
+        console.log('good job')
       } else {
         res.status(401).json({ error: 'login failed' })
+        console.log('nope')
       }
     } catch (error) {
       res.status(400)
       res.json({ error: 'login failed' })
     }
   }
+
+  app.post('/user/login', login)
 
   const getProfile = async (req, res) => {
     try {
@@ -156,7 +159,6 @@ const getUser = async(req, res) => {
   }
 
   app.get('/user/profile', getProfile)
-  app.get('/user/login', login)
 
 
 
