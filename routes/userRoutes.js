@@ -10,6 +10,7 @@ userRoutes.get('/:id', userController.getUser)
 // userRoutes.post('/user', userController.getUser)
 userRoutes.post('/user/login',userController.login)
 userRoutes.post('/user/profile',userController.profile)
+userRoutes.post('/user/logout',userController.logout)
 
 userRoutes.delete('/user/delete/:id',userController.deleteUser)
 // userRoutes.delete('/user/:id', userController.delete)

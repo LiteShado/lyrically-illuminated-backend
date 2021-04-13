@@ -8,6 +8,7 @@ const express = require('express')
 const app = express()
 
 const rowdy = require('rowdy-logger')
+const userController = require('./controllers/userController')
 const { mood } = require('./controllers/userController')
 const routesReport = rowdy.begin(app)
 
@@ -133,8 +134,29 @@ const getUser = async(req, res) => {
       res.json({ error: 'login failed' })
     }
   }
-
   app.post('/user/login', login)
+  
+  const logout = async (req, res) => {
+      const user = await models.user.findOne({
+        where: {
+          user: userId
+        }
+      })
+        console.log(user)
+    try  {
+            const response = await axios.post('http://localhost:3001/user/logout', {
+        })
+        console.log(response)
+        const userId = response.data.user.id
+        localStorage.removeItem('userId', userId)
+        showLoggedOut()
+    } catch (error) {
+      res.status(400)
+      res.json({ error: 'login failed' })
+    }
+  }
+
+  app.post('/user/logout', logout)
 
   const getProfile = async (req, res) => {
     try {
