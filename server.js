@@ -8,6 +8,7 @@ const express = require('express')
 const app = express()
 
 const rowdy = require('rowdy-logger')
+const { mood } = require('./controllers/userController')
 const routesReport = rowdy.begin(app)
 
 app.use(express.json())
@@ -18,6 +19,26 @@ const models = require('./models')
 
 // app.use('/users', userRoutes)
 
+const tags = async (req, res) => {
+  try {
+    const tag = await models.tag.findAll()
+      res.json({ tag })
+    } catch (error) {
+    res.status(400).json({ error: 'nuthin' })
+    }
+}
+app.get('/user/tags', tags)
+
+const moods = async (req, res) => {
+    try {
+      const mood = await models.mood.findAll()
+        res.json({ mood })
+      } catch (error) {
+      res.status(400).json({ error: 'nuthin' })
+      }
+  }
+  app.get('/user/moods', moods)
+
 const createUser = async (req, res) => {
     try {
       const user = await models.user.create({
@@ -27,8 +48,18 @@ const createUser = async (req, res) => {
         mood: req.body.mood,
         tag: req.body.tag
       })
+      let tag = await models.tag.findOrCreate({
+          where: {
+              tag: req.body.tag
+          }
+      })
+      let mood = await models.mood.findOrCreate({
+          where: {
+              mood: req.body.mood
+          }
+      })
 
-      res.json({ message: 'signup successful', user })
+    res.json({ message: 'signup successful', user, tag, mood })
     } catch (error) {
       res.status(400)
       res.json({ error: 'email already taken' })
@@ -37,11 +68,38 @@ const createUser = async (req, res) => {
   app.post('/user', createUser)
 
 
+  const assctaguser = async (req,res) => {
+    try {
+        const tag = await models.tag.findOne({
+            where: {
+                id: req.params.tagId
+            }
+        })
+
+        const user = await models.user.findOne({
+            where: {
+                id: req.params.userId
+            }
+        })
+        await tag.addUser(user)
+
+        res.json({
+            tag, user
+        })
+    }   catch (error) {
+        res.json({ error: error.message})
+    }
+  }
+  app.put('/tag/:tagId/user/:userId', assctaguser)
+
+
 /////test route
 const getUser = async(req, res) => {
     try {
         const user = await models.user.findOne({
-            id: req.params.id
+            where: {
+                id: req.params.id
+            }
         })
 
     res.json({ message: 'heres the user', user })
@@ -100,39 +158,7 @@ const getUser = async(req, res) => {
   app.get('/user/profile', getProfile)
   app.get('/user/login', login)
 
-  const tags = async (req, res) => {
-    try {
-      const user = await models.tag.findAll({
-        id: req.params.id
-    })
 
-      if (user.password === req.body.password) {
-        res.json({ message: 'login success', user})
-      } else {
-        res.status(401).json({ error: 'login failed' })
-      }
-    } catch (error) {
-      res.status(400).json({ error: 'login failed' })
-    }
-  }
-  app.get('/user/tags', tags)
-
-  const moods = async (req, res) => {
-    try {
-        const user = await models.mood.findAll({
-            id: req.params.id
-        })
-
-      if (user.password === req.body.password) {
-        res.json({ message: 'these are the moods', user})
-      } else {
-        res.status(401).json({ error: 'login failed' })
-      }
-    } catch (error) {
-      res.status(400).json({ error: 'login failed' })
-    }
-  }
-  app.get('/user/moods', moods)
 
 
   const deleteUser = async (req, res) => {
@@ -197,12 +223,13 @@ const getUser = async(req, res) => {
 
   const putlyrical = async (req, res) => {
     try {
-        const user = await models.user.findAll({
+        const user = await models.user.findOne({
         where: {
-            id: req.params.id
-            },
+            id: req.body.id
+            }
         })
         console.log(id)
+
         const updateUser = model.user.update({
             email: req.body.email,
             password: req.body.password,
