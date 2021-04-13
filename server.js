@@ -68,29 +68,29 @@ const createUser = async (req, res) => {
   app.post('/user', createUser)
 
 
-  const assctaguser = async (req,res) => {
-    try {
-        const tag = await models.tag.findOne({
-            where: {
-                id: req.params.tagId
-            }
-        })
+//   const assctaguser = async (req,res) => {
+//     try {
+//         const tag = await models.tag.findOne({
+//             where: {
+//                 id: req.params.tagId
+//             }
+//         })
 
-        const user = await models.user.findOne({
-            where: {
-                id: req.params.userId
-            }
-        })
-        await tag.addUser(user)
+//         const user = await models.user.findOne({
+//             where: {
+//                 id: req.params.userId
+//             }
+//         })
+//         await tag.add(user)
 
-        res.json({
-            tag, user
-        })
-    }   catch (error) {
-        res.json({ error: error.message})
-    }
-  }
-  app.put('/tag/:tagId/user/:userId', assctaguser)
+//         res.json({
+//             tag, user
+//         })
+//     }   catch (error) {
+//         res.json({ error: error.message})
+//     }
+//   }
+//   app.put('/tag/:tagId/user/:userId', assctaguser)
 
 
 /////test route
