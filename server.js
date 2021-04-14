@@ -156,7 +156,7 @@ const createUser = async (req, res) => {
     try {
       const user = await models.user.destroy({
           where: {
-            id: req.params.id
+            id: req.body.id
           }
         })
         res.json({ message: 'delete success', user})

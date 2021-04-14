@@ -51,6 +51,24 @@ userController.login = async (req,res) => {
     }
 }
 
+userController.logout = async (req,res) => {
+    const userId = await models.user.findOne({
+        where: {
+            id: req.body.id
+        },
+    })
+    localStorage.removeItem('userId')
+    localStorage.clear()
+    console.log(userId)
+    if(userId === null) {
+        res.status(200)
+        console.log('logged out')
+    } else {
+        res.status(401)
+        res.json({error: 'invalid credentials'})
+    }
+}
+
 userController.update = async (req,res) => {
 try {
 
@@ -72,7 +90,7 @@ userController.delete = async(req,res) => {
     try {
         let user = await models.user.destroy({
             where: {
-                id: req.params.id
+                id: req.body.id
             }
         })
         res.json({ message: 'user deleted'})
