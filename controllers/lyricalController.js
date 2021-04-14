@@ -6,50 +6,47 @@ const { response } = require('express')
 
 const lyricalController = {}
 
+let tagSpace = document.querySelector('.moodList1')
+let tagSpacee = tagSpace.innerText
+let moodSpace = document.querySelector('.tagList1')
+let moodSpacee = moodSpace.innerText
 
-lyricalController.search = async (req,res) => {
+lyricalController.tags = async (req,res) => {
     try {
-        let search = await axios.get(`http://api.chartlyrics.com/apiv1.asmx/SearchLyricText?lyricText=string`)
-    //    console.log(search)
-       console.log(search.data)
-       res.send(search.data)
-    } catch (error) {
-        console.log(error)
-        res.json({error})
-    }
-}
-lyricalController.searchOne = async (req,res) => {
-    try {
-        let search = await axios.get(`http://api.chartlyrics.com/apiv1.asmx/SearchLyricText?lyricText=string`)
-        res.send(search.data)
-    } catch (error) {
-        res.json({error})
-    }
-}
-lyricalController.save = async (req,res) => {
-    try {
-        const [lyricalToSave, created] = await models.lyric.findOrCreate({
-            where:{
-                lyricId: req.params.lyricId
-            },
-            defaults:{
-                lyricalId: req.params.lyricalId
+        let user = await models.tag.findOne({
+            where: {
+                id: req.params.userId
             }
         })
-        // const lyricalToSave = await models.lyrical.create({
+        let tag = await models.tag.create({
+            where: {
+                tag: req.body.tag
+            }
+        })
+        console.log(user, tag)
+        tag = tagSpacee.value
+        res.json({message: 'user, tag'})
+    } catch (error) {
+        res.json({error})
+    }
+}
 
-        //         lyricalId: req.params.lyricalId
-        // })
+lyricalController.moods = async (req,res) => {
+    try {
         let user = await models.user.findOne({
             where: {
                 id: req.params.userId
             }
         })
-        await user.addlyrical(lyricalToSave)
-        let results = await user.getlyrical()
-        res.json({lyricalToSave, user, results})
+        let mood = await models.mood.create({
+            where: {
+                mood: req.body.mood
+            }
+        })
+        console.log(user, mood)
+        mood = moodSpacee.value
+        res.json({message: 'user, mood'})
     } catch (error) {
-        console.log(error)
         res.json({error})
     }
 }

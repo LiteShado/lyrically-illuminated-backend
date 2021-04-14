@@ -18,8 +18,6 @@ app.use(require('cors')())
 
 const models = require('./models')
 
-// app.use('/users', userRoutes)
-
 const tags = async (req, res) => {
   try {
     const tag = await models.tag.findAll()
@@ -49,68 +47,25 @@ const createUser = async (req, res) => {
         mood: req.body.mood,
         tag: req.body.tag
       })
-      let tag = await models.tag.findOrCreate({
-          where: {
-              tag: req.body.tag
-          }
-      })
-      let mood = await models.mood.findOrCreate({
-          where: {
-              mood: req.body.mood
-          }
-      })
+      // let tag = await models.tag.findOrCreate({
+      //     where: {
+      //         tag: req.body.tag
+      //     }
+      // })
+      // let mood = await models.mood.findOrCreate({
+      //     where: {
+      //         mood: req.body.mood
+      //     }
+      // })
 
-    res.json({ message: 'signup successful', user, tag, mood })
+    res.json({ message: 'signup successful', user })
     } catch (error) {
       res.status(400)
-      res.json({ error: 'email already taken' })
+      res.json({ error: 'test2' })
     }
   }
   app.post('/user', createUser)
 
-
-//   const assctaguser = async (req,res) => {
-//     try {
-//         const tag = await models.tag.findOne({
-//             where: {
-//                 id: req.params.tagId
-//             }
-//         })
-
-//         const user = await models.user.findOne({
-//             where: {
-//                 id: req.params.userId
-//             }
-//         })
-//         await tag.add(user)
-
-//         res.json({
-//             tag, user
-//         })
-//     }   catch (error) {
-//         res.json({ error: error.message})
-//     }
-//   }
-//   app.put('/tag/:tagId/user/:userId', assctaguser)
-
-
-/////test route
-const getUser = async(req, res) => {
-    try {
-        const user = await models.user.findOne({
-            where: {
-                id: req.params.id
-            }
-        })
-
-    res.json({ message: 'heres the user', user })
-    } catch (error) {
-      res.status(400)
-      res.json({ error: 'cant get em' })
-    }
-  }
-  app.get('/:id', getUser)
-//////////////
 
   const login = async (req, res) => {
     try {
@@ -135,24 +90,17 @@ const getUser = async(req, res) => {
     }
   }
   app.post('/user/login', login)
-  
+
   const logout = async (req, res) => {
-      const user = await models.user.findOne({
-        where: {
-          user: userId
-        }
-      })
-        console.log(user)
     try  {
             const response = await axios.post('http://localhost:3001/user/logout', {
         })
         console.log(response)
-        const userId = response.data.user.id
-        localStorage.removeItem('userId', userId)
-        showLoggedOut()
+        localStorage.clear()
+        localStorage.removeItem('userId')
     } catch (error) {
       res.status(400)
-      res.json({ error: 'login failed' })
+      res.json({ error: 'logout failed' })
     }
   }
 
@@ -160,11 +108,9 @@ const getUser = async(req, res) => {
 
   const getProfile = async (req, res) => {
     try {
-
       const user = await models.user.findOne({
         where: {
-          id: req.body.id
-          ////should it be query instead of body?
+          id: req.headers.authorization
         }
       })
       if (user.id !== null) {
@@ -182,7 +128,23 @@ const getUser = async(req, res) => {
 
   app.get('/user/profile', getProfile)
 
-
+  const updateProfile = async (req, res) => {
+  userController.update = async (req,res) => {
+    try {
+        const user = await models.user.update({
+            where: {
+                id: req.params.id
+            }
+        })
+            let updates = await user.update(req.body)
+            res.json({updates})
+        } catch (error) {
+            res.status(401)
+            res.json({error})
+        }
+    }
+  }
+  app.put('/user/edit', updateProfile)
 
 
   const deleteUser = async (req, res) => {
@@ -198,86 +160,7 @@ const getUser = async(req, res) => {
     }
   }
 
-  app.delete('/user/delete/:id', deleteUser)
-
-  const getlyrical = async (req, res) => {
-    try {
-
-      const user = await models.user.findOne({
-        where: {
-          id: req.body.id
-          ////should it be query instead of body?
-        }
-      })
-      if (user.id !== null) {
-        console.log('user found')
-      res.json({ message: 'user found', user: user})
-    } else if (user.id === null) {
-      res.status(401)
-      res.json({error: 'No user found'})
-    }
-    } catch (error) {
-      res.status(400)
-      res.json({error: 'No user found'})
-    }
-  }
-
-  app.get('/user/getlyrical', getlyrical)
-
-
-  const deletelyrical = async (req, res) => {
-    try {
-      const user = await models.user.destroy({
-          where: {
-            id: req.params.id
-          }
-        })
-
-        res.json({ message: 'delete success', user})
-    //   } else {
-    //     res.status(401).json({ error: 'delete failed' })
-    //   }
-    } catch (error) {
-      res.status(400).json({ error: 'delete failed' })
-    }
-  }
-
-  app.delete('/user/delete/lyrical/:id', deletelyrical)
-
-
-  const putlyrical = async (req, res) => {
-    try {
-        const user = await models.user.findOne({
-        where: {
-            id: req.body.id
-            }
-        })
-        console.log(id)
-
-        const updateUser = model.user.update({
-            email: req.body.email,
-            password: req.body.password,
-            name: req.body.name,
-            mood: req.body.mood,
-            tag: req.body.tag
-        })
-        res.status(200).json({ message: 'update successful', updateUser })
-        //   if (user.password === req.body.password) {
-            //     res.json({ message: 'update successful', user})
-            //   } else {
-                //     res.status(401).json({ error: 'update failed' })
-                //   }
-            } catch (error) {
-                res.status(400).json({ error: 'update failed' })
-    }
-  }
-  app.put('/user/putlyrical', putlyrical)
-
-
-
-
-
-  // app.post('.user', createUser)
+  app.delete('/user/delete/', deleteUser)
 
 const PORT = process.env.PORT || 3001
 

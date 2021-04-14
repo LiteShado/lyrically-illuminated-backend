@@ -6,15 +6,17 @@ const userController = {}
 userController.create = async (req, res) => {
     try {
       const user = await models.user.create({
-        name: req.user.name,
-        email: req.user.email,
-        password: req.user.password
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        mood: req.body.mood,
+        tag: req.body.tag
       })
 
       res.json({ message: 'ok', user })
     } catch (error) {
       res.status(400)
-      res.json({ error: 'email already taken' })
+      res.json({ error: 'not' })
     }
   }
 
@@ -49,113 +51,63 @@ userController.login = async (req,res) => {
     }
 }
 
-userController.deleteUser = async(req,res) => {
-    try {
-        let user = await models.user.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
-        res.json({ message: 'user deleted', user})
+userController.update = async (req,res) => {
+try {
+    const user = await models.user.findOne({
+        where: {
+            id: req.params.id
+        }
+    })
+        let updates = await user.update(req.body)
+        res.json({updates})
     } catch (error) {
+        res.status(401)
         res.json({error})
     }
 }
-userController.getlyrical = async (req,res) => {
-    try {
-        let user = await models.lyric.findOne({
-            where: {
-                id: req.params.userId
-            }
-        })
-        let lyrical = await user.getlyrical()
-        console.log('lyrical', lyrical)
-        res.json({
-            lyrical
-        })
-    } catch (error) {
-        res.json({error})
-    }
 
-}
-
-userController.deleteUser = async (req,res) => {
-    try {
+userController.delete = async(req,res) => {
         let user = await models.user.findOne({
             where: {
                 id: req.params.id
             }
         })
-        await user.destroy()
-        console.log(user)
-        await user.deleteUser(user)
-        res.json({message: 'deleted'})
-    } catch (error) {
-        res.json({error})
+        let deletedUser =  user.destroy()
+        res.json({ message: 'user deleted'})
+        res.json({deletedUser})
     }
-}
 
-userController.putlyrical = async (req,res) => {
+// userController.tags = async (req,res) => {
+//     try {
+//         let user = await models.tag.findOne({
+//             where: {
+//                 id: req.params.userId
+//             }
+//         })
+//         let tag = await models.tag.findOne({
+//             where: {
+//                 id: req.params.userId
+//             }
+//         })
+//         console.log(user)
+//         res.json({message: 'user'})
+//     } catch (error) {
+//         res.json({error})
+//     }
+// }
 
-    try {
-        let user = await models.lyric.findOne({
-            where: {
-                id: req.params.userId
-            }
-        })
-        let lyric = await models.lyric.findOne({
-            where: {
-                id: req.params.lyricId
-            }
-        })
-        console.log(lyric)
-        await user.putlyrical(lyric)
-        res.json({message: 'put lyrica'})
-    } catch (error) {
-        res.json({error})
-    }
-}
-
-userController.tags = async (req,res) => {
-
-    try {
-        let user = await models.tag.findOne({
-            where: {
-                id: req.params.userId
-            }
-        })
-        let tag = await models.tag.findOne({
-            where: {
-                id: req.params.tagId
-            }
-        })
-        console.log(mood)
-        await user.tag(tag)
-        res.json({message: 'tag'})
-    } catch (error) {
-        res.json({error})
-    }
-}
-
-userController.mood = async (req,res) => {
-
-    try {
-        let user = await models.mood.findOne({
-            where: {
-                id: req.params.userId
-            }
-        })
-        let mood = await models.mood.findOne({
-            where: {
-                id: req.params.moodId
-            }
-        })
-        console.log(mood)
-        await user.mood(mood)
-        res.json({message: 'mood'})
-    } catch (error) {
-        res.json({error})
-    }
-}
+// userController.mood = async (req,res) => {
+//     try {
+//         let user = await models.mood.findOne({
+//             where: {
+//                 id: req.params.userId
+//             }
+//         })
+//         console.log(user)
+//         res.json({message: 'user'})
+//     } catch (error) {
+//         res.json({error})
+//     }
+// }
 
 module.exports = userController

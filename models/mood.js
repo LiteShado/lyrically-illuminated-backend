@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // models.mood.belongsTo(model.tagging)
+
     }
   };
   mood.init({
