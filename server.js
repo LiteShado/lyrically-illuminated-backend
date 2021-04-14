@@ -99,7 +99,7 @@ const createUser = async (req, res) => {
 
   const logout = async (req, res) => {
     try  {
-            const response = await axios.post('http://localhost:3001/user/logout', {
+            const response = await axios.post('https://lyrically-illuminated.herokuapp.com/user/logout', {
         })
         console.log(response)
         localStorage.clear()
