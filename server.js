@@ -5,16 +5,22 @@
 // const userRoutes = require('./routes/userRoutes')
 
 const express = require('express')
-const app = express()
+// const userRoutes = express.Router()
 
+const app = express();
+// const PORT = process.env.PORT || 3001;
 const rowdy = require('rowdy-logger')
 const userController = require('./controllers/userController')
-const { mood } = require('./controllers/userController')
 const routesReport = rowdy.begin(app)
 
 app.use(express.json())
-app.use(require('cors')())
+// app.listen(PORT, () => {
+//   routesReport.print()
+//   console.log(`listening on port ${PORT}`)
+//   })
 
+app.use(require('cors')())
+// const userRoutes = require('./routes/userRoutes')
 
 const models = require('./models')
 
@@ -110,7 +116,7 @@ const createUser = async (req, res) => {
     try {
       const user = await models.user.findOne({
         where: {
-          id: req.headers.authorization
+          id: req.body.id
         }
       })
       if (user.id !== null) {
@@ -129,21 +135,20 @@ const createUser = async (req, res) => {
   app.get('/user/profile', getProfile)
 
   const updateProfile = async (req, res) => {
-  userController.update = async (req,res) => {
     try {
-        const user = await models.user.update({
+      let updates = req.body
+        let user = await models.user.findOne({
             where: {
-                id: req.params.id
+                id: req.body.id
             }
         })
-            let updates = await user.update(req.body)
-            res.json({updates})
+        let final = await user.update(updates)
+            res.json({final})
         } catch (error) {
             res.status(401)
             res.json({error})
         }
     }
-  }
   app.put('/user/edit', updateProfile)
 
 
@@ -162,7 +167,7 @@ const createUser = async (req, res) => {
 
   app.delete('/user/delete/', deleteUser)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
     routesReport.print()
@@ -170,4 +175,4 @@ app.listen(PORT, () => {
     })
 
 
-// app.use('./user', userRoutes)
+// app.use('/users', userRoutes)
