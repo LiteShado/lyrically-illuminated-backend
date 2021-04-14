@@ -12,6 +12,6 @@ userRoutes.get('/user/profile',userController.profile)
 userRoutes.get('/user/mood',userController.mood)
 userRoutes.get('/user/tag',userController.tag)
 userRoutes.put('/user/edit',userController.update)
-userRoutes.delete('/user/delete',userController.delete)
+userRoutes.delete('/user/:userId/delete',userController.delete)
 
 module.exports = userRoutes

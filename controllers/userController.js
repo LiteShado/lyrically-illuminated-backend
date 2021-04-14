@@ -90,7 +90,7 @@ userController.delete = async(req,res) => {
     try {
         let user = await models.user.destroy({
             where: {
-                id: req.body.id
+                id: req.params.id
             }
         })
         res.json({ message: 'user deleted'})
@@ -99,38 +99,5 @@ userController.delete = async(req,res) => {
         res.json({error})
     }
 }
-
-// userController.tags = async (req,res) => {
-//     try {
-//         let user = await models.tag.findOne({
-//             where: {
-//                 id: req.params.userId
-//             }
-//         })
-//         let tag = await models.tag.findOne({
-//             where: {
-//                 id: req.params.userId
-//             }
-//         })
-//         console.log(user)
-//         res.json({message: 'user'})
-//     } catch (error) {
-//         res.json({error})
-//     }
-// }
-
-// userController.mood = async (req,res) => {
-//     try {
-//         let user = await models.mood.findOne({
-//             where: {
-//                 id: req.params.userId
-//             }
-//         })
-//         console.log(user)
-//         res.json({message: 'user'})
-//     } catch (error) {
-//         res.json({error})
-//     }
-// }
 
 module.exports = userController;

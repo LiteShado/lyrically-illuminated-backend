@@ -165,7 +165,7 @@ const createUser = async (req, res) => {
     }
   }
 
-  app.delete('/user/delete/', deleteUser)
+  app.delete('/user/:userId/delete', deleteUser)
 
 const PORT = process.env.PORT || 3001;
 
