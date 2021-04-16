@@ -35,25 +35,6 @@ userController.profile = async (req, res) => {
     }
   }
 
-// userController.getNull = async (req, res) => {
-//     try {
-//       const user = await models.user.findOrCreate({
-//         where: {
-//             name: null,
-//             email: null,
-//             tag: null,
-//             password: null,
-//             mood: null
-//         }
-//       })
-
-  //     res.json({ message: 'loggedout', user })
-  //   } catch (error) {
-  //     res.status(400)
-  //     res.json({ error: 'email already taken' })
-  //   }
-  // }
-
 
 userController.login = async (req,res) => {
     const user = await models.user.findOne({
