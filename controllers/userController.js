@@ -20,7 +20,7 @@ userController.create = async (req, res) => {
     }
   }
 
-userController.get = async (req, res) => {
+userController.profile = async (req, res) => {
     try {
       const user = await models.user.findOne({
         where: {
@@ -35,24 +35,24 @@ userController.get = async (req, res) => {
     }
   }
 
-userController.getNull = async (req, res) => {
-    try {
-      const user = await models.user.findOrCreate({
-        where: {
-            name: null,
-            email: null,
-            tag: null,
-            password: null,
-            mood: null
-        }
-      })
+// userController.getNull = async (req, res) => {
+//     try {
+//       const user = await models.user.findOrCreate({
+//         where: {
+//             name: null,
+//             email: null,
+//             tag: null,
+//             password: null,
+//             mood: null
+//         }
+//       })
 
-      res.json({ message: 'loggedout', user })
-    } catch (error) {
-      res.status(400)
-      res.json({ error: 'email already taken' })
-    }
-  }
+  //     res.json({ message: 'loggedout', user })
+  //   } catch (error) {
+  //     res.status(400)
+  //     res.json({ error: 'email already taken' })
+  //   }
+  // }
 
 
 userController.login = async (req,res) => {
@@ -107,16 +107,56 @@ try {
 
 userController.delete = async(req,res) => {
     try {
-        let user = await models.user.destroy({
+        let user = await models.user.findOne({
             where: {
                 id: req.params.id
             }
         })
+        await user.destroy()
         res.json({ message: 'user deleted'})
         res.json({user})
     } catch (error) {
         res.json({error})
     }
+}
+userController.tag = async (req,res) => {
+  try {
+      let user = await models.tag.findOne({
+          where: {
+              id: req.params.userId
+          }
+      })
+      let tag = await models.tag.create({
+          where: {
+              tag: req.body.tag
+          }
+      })
+      console.log(user, tag)
+      tag = tagSpacee.value
+      res.json({message: 'user, tag'})
+  } catch (error) {
+      res.json({error})
+  }
+}
+
+userController.mood = async (req,res) => {
+  try {
+      let user = await models.user.findOne({
+          where: {
+              id: req.params.userId
+          }
+      })
+      let mood = await models.mood.create({
+          where: {
+              mood: req.body.mood
+          }
+      })
+      console.log(user, mood)
+      mood = moodSpacee.value
+      res.json({message: 'user, mood'})
+  } catch (error) {
+      res.json({error})
+  }
 }
 
 
