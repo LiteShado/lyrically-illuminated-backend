@@ -91,18 +91,17 @@ userController.logout = async (req,res) => {
 userController.update = async (req,res) => {
 try {
 
-    let updates = req.body
-    let user = await models.user.findOne({
+    const user = await models.user.findOne({
         where: {
-            id: req.params.id
+            id: req.params.userId
         }
       })
-        await user.update()
-        let final = await user.update(updates)
-        res.json({final})
+
+        let final = await user.update(req.body)
+        res.json({user, final})
     } catch (error) {
-        res.status(401)
-        res.json({error})
+        // res.status(401)
+        res.json(error)
     }
 }
 
@@ -110,12 +109,11 @@ userController.delete = async(req,res) => {
     try {
         let user = await models.user.findOne({
             where: {
-                id: req.params.id
+                id: req.params.userId
             }
         })
         await user.destroy()
-        res.json({ message: 'user deleted'})
-        res.json({user})
+        res.json({ message: 'user deleted', user})
     } catch (error) {
         res.json({error})
     }
