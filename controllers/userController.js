@@ -94,7 +94,7 @@ try {
     let updates = req.body
     let user = await models.user.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
         let final = await user.update(updates)
