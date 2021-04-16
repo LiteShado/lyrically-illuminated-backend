@@ -8,10 +8,10 @@ const userRoutes = require('./routes/userRoutes')
 app.use(express.json())
 app.use(require('cors')())
 
-const PORT = process.env.PORT || 3001
+const port = process.env.PORT || 3001
 
-app.listen(PORT, () => {
-    console.log(`port running on ${PORT}`)
+app.listen(port, () => {
+    console.log(`port running on ${port}`)
   routesReport.print()
 })
 

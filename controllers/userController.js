@@ -96,7 +96,8 @@ try {
         where: {
             id: req.params.id
         }
-    })
+      })
+        await user.update()
         let final = await user.update(updates)
         res.json({final})
     } catch (error) {
